@@ -1,7 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "9d0efd7c-50c4-490d-9b4b-bc8f682bb8f6-1.png",
+      "filename" : "9d0efd7c-50c4-490d-9b4b-bc8f682bb8f6-0.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
@@ -12,11 +12,12 @@
           "value" : "dark"
         }
       ],
-      "filename" : "eaa90efc-23d7-4c71-805b-d7a76b8b7c8d-1.png",
+      "filename" : "eaa90efc-23d7-4c71-805b-d7a76b8b7c8d-0.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
+      "filename" : "9d0efd7c-50c4-490d-9b4b-bc8f682bb8f6-1.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
@@ -27,6 +28,7 @@
           "value" : "dark"
         }
       ],
+      "filename" : "eaa90efc-23d7-4c71-805b-d7a76b8b7c8d-1.png",
       "idiom" : "universal",
       "scale" : "2x"
     },

@@ -1,7 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "b9bdea45-24d0-475d-8389-ea7de79041f2-1.png",
+      "filename" : "b9bdea45-24d0-475d-8389-ea7de79041f2-0.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
@@ -12,11 +12,12 @@
           "value" : "dark"
         }
       ],
-      "filename" : "07f587d1-175c-48cc-b1bf-de77075cc793-1.png",
+      "filename" : "07f587d1-175c-48cc-b1bf-de77075cc793-0.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
+      "filename" : "b9bdea45-24d0-475d-8389-ea7de79041f2-1.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
@@ -27,6 +28,7 @@
           "value" : "dark"
         }
       ],
+      "filename" : "07f587d1-175c-48cc-b1bf-de77075cc793-1.png",
       "idiom" : "universal",
       "scale" : "2x"
     },

@@ -8,10 +8,12 @@
 import SwiftUI
 
 @main
-struct RunCat365MacOSApp: App {
+struct RunCatMacOSApp: App {
     var body: some Scene {
-        WindowGroup {
+        MenuBarExtra {
             ContentView()
+        } label: {
+            Image("cat_0")
         }
     }
 }

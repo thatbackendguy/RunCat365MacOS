@@ -4,48 +4,92 @@
 //
 //  Created by Yash Prajapati on 18/07/25.
 //
-
 import Foundation
 
-func getCPUUsage() -> Double {
-    var totalUsage: Double = 0.0
-    var kr: kern_return_t
-    var task_info_count: mach_msg_type_number_t
-
-    task_info_count = mach_msg_type_number_t(TASK_INFO_MAX)
-    var tinfo = [integer_t](repeating: 0, count: Int(task_info_count))
-
-    kr = task_info(mach_task_self_, task_flavor_t(TASK_BASIC_INFO), &tinfo, &task_info_count)
-    if kr != KERN_SUCCESS { return -1 }
-
-    var thread_list: thread_act_array_t?
-    var thread_count: mach_msg_type_number_t = 0
-    defer {
-        if let thread_list = thread_list {
-            vm_deallocate(mach_task_self_, vm_address_t(UnsafePointer(thread_list).pointee), vm_size_t(thread_count))
+class SystemCPU {
+    
+    private var previousCPUInfo: [Int32] = []
+    private var previousTimestamp: CFTimeInterval = 0
+    
+    func getCPUUtilization() -> Double {
+        var cpuInfo: UnsafeMutablePointer<integer_t>? = nil
+        var numCpuInfo: mach_msg_type_number_t = 0
+        var numCpus: natural_t = 0
+        
+        let result = host_processor_info(mach_host_self(),
+                                       PROCESSOR_CPU_LOAD_INFO,
+                                       &numCpus,
+                                       &cpuInfo,
+                                       &numCpuInfo)
+        
+        guard result == KERN_SUCCESS, let cpuInfo = cpuInfo else {
+            return 0.0
         }
-    }
-
-    kr = task_threads(mach_task_self_, &thread_list, &thread_count)
-    if kr != KERN_SUCCESS { return -1 }
-
-    if let thread_list = thread_list {
-        for j in 0..<Int(thread_count) {
-            var thread_info_count = mach_msg_type_number_t(THREAD_INFO_MAX)
-            var thinfo = [integer_t](repeating: 0, count: Int(thread_info_count))
-            kr = thread_info(thread_list[j], thread_flavor_t(THREAD_BASIC_INFO), &thinfo, &thread_info_count)
-            if kr != KERN_SUCCESS { return -1 }
-
-            // --- THIS IS THE CORRECTED LINE ---
-            let thread_basic_info = thinfo.withUnsafeBytes {
-                $0.load(as: thread_basic_info_data_t.self)
-            }
-            // ------------------------------------
-
-            if thread_basic_info.flags & TH_FLAGS_IDLE == 0 {
-                totalUsage = totalUsage + (Double(thread_basic_info.cpu_usage) / Double(TH_USAGE_SCALE)) * 100
+        
+        defer {
+            vm_deallocate(mach_task_self_,
+                         vm_address_t(bitPattern: cpuInfo),
+                         vm_size_t(numCpuInfo))
+        }
+        
+        let currentTimestamp = CFAbsoluteTimeGetCurrent()
+        var currentCPUInfo: [Int32] = []
+        
+        for i in 0..<Int(numCpus) {
+            let cpuLoadInfo = cpuInfo.advanced(by: Int(CPU_STATE_MAX) * i)
+            for j in 0..<Int(CPU_STATE_MAX) {
+                currentCPUInfo.append(cpuLoadInfo[j])
             }
         }
+        
+        if !previousCPUInfo.isEmpty && previousCPUInfo.count == currentCPUInfo.count {
+            let usage = calculateCPUUsage(current: currentCPUInfo,
+                                        previous: previousCPUInfo,
+                                        cpuCount: Int(numCpus))
+            
+            previousCPUInfo = currentCPUInfo
+            previousTimestamp = currentTimestamp
+            
+            return usage
+        } else {
+            previousCPUInfo = currentCPUInfo
+            previousTimestamp = currentTimestamp
+            return 0.0
+        }
     }
-    return totalUsage
+    
+    private func calculateCPUUsage(current: [Int32], previous: [Int32], cpuCount: Int) -> Double {
+        var totalUser: Int64 = 0
+        var totalSystem: Int64 = 0
+        var totalIdle: Int64 = 0
+        var totalNice: Int64 = 0
+        
+        for i in 0..<cpuCount {
+            let baseIndex = i * Int(CPU_STATE_MAX)
+            
+            let userDelta = Int64(current[baseIndex + Int(CPU_STATE_USER)] - previous[baseIndex + Int(CPU_STATE_USER)])
+            let systemDelta = Int64(current[baseIndex + Int(CPU_STATE_SYSTEM)] - previous[baseIndex + Int(CPU_STATE_SYSTEM)])
+            let idleDelta = Int64(current[baseIndex + Int(CPU_STATE_IDLE)] - previous[baseIndex + Int(CPU_STATE_IDLE)])
+            let niceDelta = Int64(current[baseIndex + Int(CPU_STATE_NICE)] - previous[baseIndex + Int(CPU_STATE_NICE)])
+            
+            totalUser += userDelta
+            totalSystem += systemDelta
+            totalIdle += idleDelta
+            totalNice += niceDelta
+        }
+        
+        let totalTicks = totalUser + totalSystem + totalIdle + totalNice
+        
+        if totalTicks > 0 {
+            let activeTicks = totalUser + totalSystem + totalNice
+            return (Double(activeTicks) / Double(totalTicks)) * 100.0
+        }
+        
+        return 0.0
+    }
+    
+    func reset() {
+        previousCPUInfo.removeAll()
+        previousTimestamp = 0
+    }
 }

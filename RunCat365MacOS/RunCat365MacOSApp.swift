@@ -9,6 +9,7 @@ import SwiftUI
 
 @main
 struct RunCatMacOSApp: App {
+    
     @StateObject private var viewModel = AppViewModel()
 
     var body: some Scene {

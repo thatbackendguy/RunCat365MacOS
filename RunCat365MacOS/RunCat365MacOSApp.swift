@@ -9,11 +9,14 @@ import SwiftUI
 
 @main
 struct RunCatMacOSApp: App {
+    @StateObject private var viewModel = AppViewModel()
+
     var body: some Scene {
         MenuBarExtra {
-            ContentView()
+            ContentView(viewModel: viewModel)
         } label: {
-            Image("cat_0")
+            Image(viewModel.iconName)
         }
     }
 }
+

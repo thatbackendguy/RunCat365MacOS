@@ -10,9 +10,22 @@
 		406CEA1E2E2A1EC9009E31F3 /* RunCat365MacOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RunCat365MacOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		406CEA372E2A273F009E31F3 /* Exceptions for "RunCat365MacOS" folder in "RunCat365MacOS" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 406CEA1D2E2A1EC9009E31F3 /* RunCat365MacOS */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		406CEA202E2A1EC9009E31F3 /* RunCat365MacOS */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				406CEA372E2A273F009E31F3 /* Exceptions for "RunCat365MacOS" folder in "RunCat365MacOS" target */,
+			);
 			path = RunCat365MacOS;
 			sourceTree = "<group>";
 		};
@@ -254,6 +267,8 @@
 				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = RunCat365MacOS/Info.plist;
+				INFOPLIST_KEY_LSUIElement = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -279,6 +294,8 @@
 				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = RunCat365MacOS/Info.plist;
+				INFOPLIST_KEY_LSUIElement = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

@@ -1,5 +1,6 @@
 # RunCat 365 MacOS
-
+![](assets/RunCat365MacOS.png)
+   
 **A cute running cat animation on your MacOS Taskbar.**
 
 If you need for windows, checkout: [https://github.com/Kyome22/RunCat365](https://github.com/Kyome22/RunCat365)
